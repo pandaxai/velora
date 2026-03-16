@@ -148,12 +148,114 @@
       }
     };
   </script>
-  <style>body { box-sizing: border-box; }</style>
+  <style>body { box-sizing: border-box; }
+    .controls-bar {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 50;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .language-selector, .theme-toggle {
+      background: rgba(255, 248, 240, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 50px;
+      padding: 8px 12px;
+      box-shadow: 0 4px 15px rgba(175, 96, 26, 0.15);
+      border: 2px solid rgba(240, 178, 122, 0.3);
+      cursor: pointer;
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      color: #935116;
+    }
+    .theme-toggle:hover, .language-selector:hover {
+      background: rgba(255, 248, 240, 1);
+      box-shadow: 0 6px 20px rgba(175, 96, 26, 0.25);
+    }
+    .language-selector select {
+      background: transparent;
+      border: none;
+      color: #935116;
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 4px 8px;
+      outline: none;
+      letter-spacing: 0.05em;
+    }
+    .language-selector select option {
+      background: #FDF2E9;
+      color: #935116;
+    }
+    /* Dark mode styles */
+    body.dark-mode {
+      background-color: #1a1410 !important;
+    }
+    body.dark-mode #app-wrapper {
+      background: linear-gradient(160deg, #1a1410 0%, #2a1f18 30%, #1a1410 60%, #3a2820 100%) !important;
+    }
+    body.dark-mode .controls-bar {
+      background: transparent;
+    }
+    body.dark-mode .language-selector, body.dark-mode .theme-toggle {
+      background: transparent;
+      border-color: rgba(175, 96, 26, 0.4);
+      color: #F0B27A;
+    }
+    body.dark-mode .language-selector select {
+      color: #F0B27A;
+    }
+    body.dark-mode .language-selector select option {
+      background: #2a1f18;
+      color: #F0B27A;
+    }
+    body.dark-mode .theme-toggle:hover, body.dark-mode .language-selector:hover {
+      background: rgba(42, 31, 24, 1);
+      box-shadow: 0 6px 20px rgba(240, 178, 122, 0.2);
+    }
+    body.dark-mode #brand-name, body.dark-mode .brand-shimmer-secondary,
+    body.dark-mode #headline, body.dark-mode #subheadline-1, body.dark-mode #subheadline-2,
+    body.dark-mode #founder-prefix, body.dark-mode #founder-name, body.dark-mode #cta-text,
+    body.dark-mode #footer-text, body.dark-mode p, body.dark-mode h2 {
+      color: #F0B27A;
+    }
+    body.dark-mode [style*="color: #935116"] {
+      color: #F0B27A !important;
+    }
+    body.dark-mode [style*="color: #AF601A"] {
+      color: #FFB740 !important;
+    }
+    body.dark-mode .card-glow {
+      background: rgba(42, 31, 24, 0.88) !important;
+      border-color: rgba(175, 96, 26, 0.6) !important;
+      box-shadow: 0 8px 40px rgba(175, 96, 26, 0.25), 0 2px 12px rgba(240, 178, 122, 0.15), inset 0 1px 1px rgba(240, 178, 122, 0.2) !important;
+    }
+    body.dark-mode .card-glow:hover {
+      box-shadow: 0 12px 60px rgba(175, 96, 26, 0.35), 0 4px 16px rgba(240, 178, 122, 0.25), inset 0 1px 2px rgba(240, 178, 122, 0.3) !important;
+    }
+  </style>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js" type="text/javascript"></script>
   <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
  </head>
  <body class="h-full" style="background-color: #FDF2E9;">
-  <div id="app-wrapper" class="h-full w-full overflow-auto relative" style="background: linear-gradient(160deg, #FDF2E9 0%, #FFF8F0 30%, #FDF2E9 60%, #FDEBD2 100%);"><!-- Sparkles -->
+  <div class="controls-bar">
+   <select id="language-select" class="language-selector" onchange="changeLanguage(this.value)"> <option value="english">English</option> <option value="dari">دری</option> <option value="pashto">پشتو</option> <option value="german">Deutsch</option> </select> <button id="theme-toggle-btn" class="theme-toggle" onclick="toggleTheme()" title="Toggle dark/light mode"> <i data-lucide="moon" style="width: 20px; height: 20px;"></i> </button>
+  </div>
+  <div id="app-wrapper" class="h-full w-full overflow-auto relative" style="background: linear-gradient(160deg, #FDF2E9 0%, #FFF8F0 30%, #FDF2E9 60%, #FDEBD2 100%);">
+   <!-- Sparkles -->
    <div class="sparkle"></div>
    <div class="sparkle"></div>
    <div class="sparkle"></div>
@@ -161,7 +263,8 @@
    <div class="sparkle"></div>
    <div class="sparkle"></div><!-- Decorative SVG elements -->
    <div class="absolute top-6 left-6 float-slow opacity-25 pointer-events-none" aria-hidden="true">
-    <svg width="90" height="90" viewbox="0 0 90 90" fill="none"><defs>
+    <svg width="90" height="90" viewbox="0 0 90 90" fill="none">
+     <defs>
       <lineargradient id="flower1" x1="0%" y1="0%" x2="100%" y2="100%">
        <stop offset="0%" style="stop-color:#F0B27A;stop-opacity:0.8" />
        <stop offset="100%" style="stop-color:#AF601A;stop-opacity:0.5" />
@@ -170,7 +273,8 @@
     </svg>
    </div>
    <div class="absolute top-12 right-8 float-med opacity-20 pointer-events-none" aria-hidden="true">
-    <svg width="85" height="85" viewbox="0 0 85 85" fill="none"><defs>
+    <svg width="85" height="85" viewbox="0 0 85 85" fill="none">
+     <defs>
       <lineargradient id="star1" x1="0%" y1="0%" x2="100%" y2="100%">
        <stop offset="0%" style="stop-color:#F0B27A;stop-opacity:0.9" />
        <stop offset="100%" style="stop-color:#AF601A;stop-opacity:0.6" />
@@ -179,7 +283,8 @@
     </svg>
    </div>
    <div class="absolute bottom-40 left-4 float-fast opacity-20 pointer-events-none" aria-hidden="true">
-    <svg width="100" height="70" viewbox="0 0 100 70" fill="none"><defs>
+    <svg width="100" height="70" viewbox="0 0 100 70" fill="none">
+     <defs>
       <lineargradient id="gift1" x1="0%" y1="0%" x2="100%" y2="100%">
        <stop offset="0%" style="stop-color:#AF601A;stop-opacity:0.7" />
        <stop offset="100%" style="stop-color:#935116;stop-opacity:0.5" />
@@ -188,7 +293,8 @@
     </svg>
    </div>
    <div class="absolute bottom-16 right-5 float-med opacity-15 pointer-events-none" aria-hidden="true" style="animation-delay: 1.5s;">
-    <svg width="80" height="100" viewbox="0 0 80 100" fill="none"><defs>
+    <svg width="80" height="100" viewbox="0 0 80 100" fill="none">
+     <defs>
       <lineargradient id="heart1" x1="0%" y1="0%" x2="100%" y2="100%">
        <stop offset="0%" style="stop-color:#F0B27A;stop-opacity:0.8" />
        <stop offset="100%" style="stop-color:#AF601A;stop-opacity:0.4" />
@@ -197,19 +303,24 @@
     </svg>
    </div><!-- Ribbon decorations -->
    <div class="absolute top-1/3 left-2 opacity-10 pointer-events-none" aria-hidden="true">
-    <svg width="40" height="120" viewbox="0 0 40 120" fill="none"><path d="M20 0C20 0 35 20 20 40C5 60 35 80 20 100C15 110 20 120 20 120" stroke="#935116" stroke-width="2" fill="none" />
+    <svg width="40" height="120" viewbox="0 0 40 120" fill="none">
+     <path d="M20 0C20 0 35 20 20 40C5 60 35 80 20 100C15 110 20 120 20 120" stroke="#935116" stroke-width="2" fill="none" />
     </svg>
    </div>
    <div class="absolute top-1/4 right-3 opacity-10 pointer-events-none" aria-hidden="true">
-    <svg width="40" height="100" viewbox="0 0 40 100" fill="none"><path d="M20 0C20 0 5 15 20 30C35 45 5 60 20 75C25 82 20 100 20 100" stroke="#AF601A" stroke-width="2" fill="none" />
+    <svg width="40" height="100" viewbox="0 0 40 100" fill="none">
+     <path d="M20 0C20 0 5 15 20 30C35 45 5 60 20 75C25 82 20 100 20 100" stroke="#AF601A" stroke-width="2" fill="none" />
     </svg>
    </div>
-   <main class="relative z-10 flex flex-col items-center justify-center min-h-full px-4 py-12 sm:py-16"><!-- Logo -->
-    <div class="anim-fade-1 mb-8"><img src="https://raw.githubusercontent.com/pandaxai/velora/main/velora.png" alt="Velora Art Gift Logo" class="h-32 sm:h-40 md:h-52 lg:h-64 drop-shadow-lg" loading="lazy" onerror="console.error('Logo failed to load:', this.src); this.style.display='none';">
+   <main class="relative z-10 flex flex-col items-center justify-center min-h-full px-4 py-12 sm:py-16">
+    <!-- Logo -->
+    <div class="anim-fade-1 mb-8">
+     <img src="https://raw.githubusercontent.com/pandaxai/velora/main/velora.png" alt="Velora Art Gift Logo" class="h-32 sm:h-40 md:h-52 lg:h-64 drop-shadow-lg" loading="lazy" onerror="console.error('Logo failed to load:', this.src); this.style.display='none';">
     </div><!-- Brand Name -->
     <div class="anim-fade-1 text-center mb-2">
      <div class="divider-ornament mb-6">
-      <svg width="20" height="20" viewbox="0 0 20 20" fill="none" aria-hidden="true"><defs>
+      <svg width="20" height="20" viewbox="0 0 20 20" fill="none" aria-hidden="true">
+       <defs>
         <lineargradient id="star-accent" x1="0%" y1="0%" x2="100%" y2="100%">
          <stop offset="0%" style="stop-color:#F0B27A;stop-opacity:1" />
          <stop offset="100%" style="stop-color:#AF601A;stop-opacity:0.8" />
@@ -222,7 +333,8 @@
       ✦ Handmade &amp; Artisan ✦
      </div>
      <div class="divider-ornament mt-6">
-      <svg width="16" height="16" viewbox="0 0 16 16" fill="none" aria-hidden="true"><defs>
+      <svg width="16" height="16" viewbox="0 0 16 16" fill="none" aria-hidden="true">
+       <defs>
         <lineargradient id="dot-accent" x1="0%" y1="0%" x2="100%" y2="100%">
          <stop offset="0%" style="stop-color:#F0B27A" />
          <stop offset="100%" style="stop-color:#AF601A" />
@@ -231,11 +343,13 @@
       </svg>
      </div>
     </div><!-- Main Card -->
-    <div class="anim-fade-2 card-glow rounded-3xl p-8 sm:p-10 md:p-12 max-w-2xl w-full text-center mt-12 border" style="background: rgba(255, 248, 240, 0.88); backdrop-filter: blur(20px); border-color: rgba(240, 178, 122, 0.4); border-width: 2px;"><!-- Headline -->
+    <div class="anim-fade-2 card-glow rounded-3xl p-8 sm:p-10 md:p-12 max-w-2xl w-full text-center mt-12 border" style="background: rgba(255, 248, 240, 0.88); backdrop-filter: blur(20px); border-color: rgba(240, 178, 122, 0.4); border-width: 2px;">
+     <!-- Headline -->
      <h2 id="headline" class="text-3xl sm:text-4xl md:text-5xl font-bold mb-6" style="font-family: 'Playfair Display', serif; color: #935116; letter-spacing: -0.01em;">Website Coming Soon</h2><!-- Decorative line -->
      <div class="flex items-center justify-center gap-4 mb-8" aria-hidden="true">
       <div class="h-1 flex-1 max-w-16" style="background: linear-gradient(90deg, transparent, #F0B27A); border-radius: 1px;"></div>
-      <svg width="28" height="28" viewbox="0 0 28 28" fill="none"><defs>
+      <svg width="28" height="28" viewbox="0 0 28 28" fill="none">
+       <defs>
         <lineargradient id="heart-deco" x1="0%" y1="0%" x2="100%" y2="100%">
          <stop offset="0%" style="stop-color:#F0B27A" />
          <stop offset="100%" style="stop-color:#AF601A" />
@@ -250,40 +364,94 @@
       <p id="founder-prefix" class="text-xs sm:text-sm tracking-widest uppercase mb-4" style="font-family: 'Nunito', sans-serif; color: #AF601A; letter-spacing: 0.2em; font-weight: 600;">Founded &amp; Owned by</p>
       <p id="founder-name" class="text-4xl sm:text-5xl" style="font-family: 'Dancing Script', cursive; color: #935116; font-weight: 700; letter-spacing: 0.02em;">Parisa Qasimi</p>
       <div class="flex justify-center mt-4" aria-hidden="true">
-       <svg width="100" height="16" viewbox="0 0 100 16" fill="none"><path d="M0 8C10 3 20 13 30 8C40 3 50 13 60 8C70 3 80 13 90 8C93 6 96 8 100 8" stroke="#F0B27A" stroke-width="2" fill="none" opacity="0.6" stroke-linecap="round" />
+       <svg width="100" height="16" viewbox="0 0 100 16" fill="none">
+        <path d="M0 8C10 3 20 13 30 8C40 3 50 13 60 8C70 3 80 13 90 8C93 6 96 8 100 8" stroke="#F0B27A" stroke-width="2" fill="none" opacity="0.6" stroke-linecap="round" />
        </svg>
       </div>
      </div><!-- CTA Section -->
      <div class="anim-fade-4">
       <p id="cta-text" class="text-base sm:text-lg mb-8" style="font-family: 'Nunito', sans-serif; color: #AF601A; font-weight: 500;">In the meantime, follow our handmade creations on Instagram.</p><!-- Instagram Button --> <a id="ig-link" href="https://www.instagram.com/velora.artgift?igsh=MXVwdG1maTVkbjFnZQ==" target="_blank" rel="noopener noreferrer" class="ig-btn inline-flex items-center gap-3 px-10 py-5 rounded-full text-white font-bold text-lg sm:text-xl" style="font-family: 'Nunito', sans-serif; background: linear-gradient(135deg, #AF601A, #935116); box-shadow: 0 8px 30px rgba(175, 96, 26, 0.4), 0 0 20px rgba(240, 178, 122, 0.15);">
-       <svg width="26" height="26" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5" /> <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /> <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+       <svg width="26" height="26" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="2" y="2" width="20" height="20" rx="5" ry="5" /> <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /> <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
        </svg><span id="button-text">Follow Velora on Instagram</span> </a>
      </div>
     </div><!-- Decorative bottom flowers -->
     <div class="anim-fade-5 flex items-center gap-4 mt-10" aria-hidden="true">
-     <svg width="30" height="30" viewbox="0 0 30 30" fill="none" class="opacity-30"><circle cx="15" cy="10" r="5" fill="#F0B27A" /> <circle cx="10" cy="15" r="5" fill="#F0B27A" /> <circle cx="20" cy="15" r="5" fill="#F0B27A" /> <circle cx="12" cy="20" r="5" fill="#F0B27A" /> <circle cx="18" cy="20" r="5" fill="#F0B27A" /> <circle cx="15" cy="15" r="4" fill="#AF601A" opacity="0.6" />
+     <svg width="30" height="30" viewbox="0 0 30 30" fill="none" class="opacity-30">
+      <circle cx="15" cy="10" r="5" fill="#F0B27A" /> <circle cx="10" cy="15" r="5" fill="#F0B27A" /> <circle cx="20" cy="15" r="5" fill="#F0B27A" /> <circle cx="12" cy="20" r="5" fill="#F0B27A" /> <circle cx="18" cy="20" r="5" fill="#F0B27A" /> <circle cx="15" cy="15" r="4" fill="#AF601A" opacity="0.6" />
      </svg>
-     <svg width="6" height="6" viewbox="0 0 6 6">
-      <circle cx="3" cy="3" r="2" fill="#F0B27A" opacity="0.4" />
+     <svg width="6" height="6" viewbox="0 0 6 6"><circle cx="3" cy="3" r="2" fill="#F0B27A" opacity="0.4" />
      </svg>
-     <svg width="30" height="30" viewbox="0 0 30 30" fill="none" class="opacity-25"><path d="M15 5C15 5 22 10 22 17C22 24 15 28 15 28C15 28 8 24 8 17C8 10 15 5 15 5Z" fill="#AF601A" opacity="0.4" /> <path d="M15 10C15 10 19 13 19 17C19 21 15 24 15 24C15 24 11 21 11 17C11 13 15 10 15 10Z" fill="#F0B27A" opacity="0.3" />
+     <svg width="30" height="30" viewbox="0 0 30 30" fill="none" class="opacity-25">
+      <path d="M15 5C15 5 22 10 22 17C22 24 15 28 15 28C15 28 8 24 8 17C8 10 15 5 15 5Z" fill="#AF601A" opacity="0.4" /> <path d="M15 10C15 10 19 13 19 17C19 21 15 24 15 24C15 24 11 21 11 17C11 13 15 10 15 10Z" fill="#F0B27A" opacity="0.3" />
      </svg>
-     <svg width="6" height="6" viewbox="0 0 6 6">
-      <circle cx="3" cy="3" r="2" fill="#F0B27A" opacity="0.4" />
+     <svg width="6" height="6" viewbox="0 0 6 6"><circle cx="3" cy="3" r="2" fill="#F0B27A" opacity="0.4" />
      </svg>
-     <svg width="30" height="30" viewbox="0 0 30 30" fill="none" class="opacity-30"><circle cx="15" cy="10" r="5" fill="#F0B27A" /> <circle cx="10" cy="15" r="5" fill="#F0B27A" /> <circle cx="20" cy="15" r="5" fill="#F0B27A" /> <circle cx="12" cy="20" r="5" fill="#F0B27A" /> <circle cx="18" cy="20" r="5" fill="#F0B27A" /> <circle cx="15" cy="15" r="4" fill="#AF601A" opacity="0.6" />
+     <svg width="30" height="30" viewbox="0 0 30 30" fill="none" class="opacity-30">
+      <circle cx="15" cy="10" r="5" fill="#F0B27A" /> <circle cx="10" cy="15" r="5" fill="#F0B27A" /> <circle cx="20" cy="15" r="5" fill="#F0B27A" /> <circle cx="12" cy="20" r="5" fill="#F0B27A" /> <circle cx="18" cy="20" r="5" fill="#F0B27A" /> <circle cx="15" cy="15" r="4" fill="#AF601A" opacity="0.6" />
      </svg>
     </div><!-- Footer -->
     <footer class="anim-fade-6 mt-10 mb-4 text-center">
      <p id="footer-text" class="text-xs sm:text-sm tracking-widest uppercase" style="font-family: 'Nunito', sans-serif; color: #AF601A; opacity: 0.7; letter-spacing: 0.12em;">Velora Art Gift – Handmade With Love</p>
      <div class="flex justify-center mt-3" aria-hidden="true">
-      <svg width="24" height="24" viewbox="0 0 24 24" fill="none"><path d="M12 4C12 4 4 9 4 14C4 19 12 22 12 22C12 22 20 19 20 14C20 9 12 4 12 4Z" fill="#F0B27A" opacity="0.4" /> <path d="M12 8C12 8 7 11 7 14.5C7 18 12 20 12 20C12 20 17 18 17 14.5C17 11 12 8 12 8Z" fill="#AF601A" opacity="0.3" />
+      <svg width="24" height="24" viewbox="0 0 24 24" fill="none">
+       <path d="M12 4C12 4 4 9 4 14C4 19 12 22 12 22C12 22 20 19 20 14C20 9 12 4 12 4Z" fill="#F0B27A" opacity="0.4" /> <path d="M12 8C12 8 7 11 7 14.5C7 18 12 20 12 20C12 20 17 18 17 14.5C17 11 12 8 12 8Z" fill="#AF601A" opacity="0.3" />
       </svg>
      </div>
     </footer>
    </main>
   </div>
   <script>
+    const languages = {
+      english: { brand_name: "Velora Art Gift", headline: "Website Coming Soon", subheadline_1: "Our beautiful website is currently under creation.", subheadline_2: "We are preparing something special for you.", founder_prefix: "Founded & Owned by", cta_text: "In the meantime, follow our handmade creations on Instagram.", button_text: "Follow Velora on Instagram", footer_text: "Velora Art Gift – Handmade With Love" },
+      dari: { brand_name: "ولورا هنر تحفه", headline: "وب‌ سایت به زودی می‌آید", subheadline_1: "وب‌ سایت زیبای ما در حال حاضر در حال ساخت است.", subheadline_2: "ما چیزی ویژه برای شما آماده میکنیم.", founder_prefix: "بنیانگذار و مالک", cta_text: "در این بین، آثار دستساز ما را در اینستاگرام دنبال کنید.", button_text: "ولورا را در اینستاگرام دنبال کنید", footer_text: "ولورا هنر تحفه – با محبت ساخته شده" },
+      pashto: { brand_name: "ویلورا آرټ ګيفت", headline: "ویب‌ سایت ډير ژر راتلونکی", subheadline_1: "زموږ خوبصورت ویب‌ سایت په دې وخت کې جاري دی.", subheadline_2: "موږ د تاسو لپاره یو ځانګړی شی آماده کوو.", founder_prefix: "بنسټ ایښودونکی او مالک", cta_text: "تر هغه مهاله، زموږ دستي فنون په انسټاګرام کې تعقیب کړئ.", button_text: "ویلورا په انسټاګرام کې تعقیب کړئ", footer_text: "ویلورا آرټ ګيفت – د مینې سره جوړ شوی" },
+      german: { brand_name: "Velora Art Gift", headline: "Website kommt bald", subheadline_1: "Unsere schöne Website wird derzeit erstellt.", subheadline_2: "Wir bereiten etwas Besonderes für Sie vor.", founder_prefix: "Gründer und Eigentümer", cta_text: "Folgen Sie unseren handgefertigten Kreationen auf Instagram.", button_text: "Velora auf Instagram folgen", footer_text: "Velora Art Gift – Mit Liebe handgefertigt" }
+    };
+
+    function changeLanguage(lang) {
+      const content = languages[lang] || languages.english;
+      document.documentElement.dir = (lang === 'dari' || lang === 'pashto') ? 'rtl' : 'ltr';
+      
+      document.getElementById('headline').textContent = content.headline;
+      document.getElementById('subheadline-1').textContent = content.subheadline_1;
+      document.getElementById('subheadline-2').textContent = content.subheadline_2;
+      document.getElementById('founder-prefix').textContent = content.founder_prefix;
+      document.getElementById('cta-text').textContent = content.cta_text;
+      document.getElementById('button-text').textContent = content.button_text;
+      document.getElementById('footer-text').textContent = content.footer_text;
+      
+      localStorage.setItem('selectedLanguage', lang);
+    }
+
+    function toggleTheme() {
+      const isDarkMode = document.body.classList.toggle('dark-mode');
+      const icon = document.querySelector('#theme-toggle-btn i');
+      
+      if (isDarkMode) {
+        icon.setAttribute('data-lucide', 'sun');
+      } else {
+        icon.setAttribute('data-lucide', 'moon');
+      }
+      
+      lucide.createIcons();
+      localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        const icon = document.querySelector('#theme-toggle-btn i');
+        icon.setAttribute('data-lucide', 'sun');
+      }
+      lucide.createIcons();
+      
+      const saved = localStorage.getItem('selectedLanguage') || 'english';
+      document.getElementById('language-select').value = saved;
+      changeLanguage(saved);
+    });
+
     const defaultConfig = {
       brand_name: 'Velora Art Gift',
       headline: 'Website Coming Soon',
@@ -396,5 +564,5 @@
       }
     });
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9dcfbdf6463474e9',t:'MTc3MzYyMjAwMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9dcfd644d6b1550e',t:'MTc3MzYyMjk5NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
